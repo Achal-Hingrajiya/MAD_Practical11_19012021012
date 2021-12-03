@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_note_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Note Title"
+            android:layout_marginTop="10dp"
+            app:boxBackgroundColor="@android:color/transparent"
+            android:layout_marginHorizontal="20dp"
+            app:hintTextColor="@color/pink"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_note_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_baseline_event_note_24"
+                android:drawableRight="@drawable/ic_baseline_event_note_24"
+                android:drawableTint="@color/purple_500"
+                android:backgroundTint="@color/pink"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_note_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Note Sub Title"
+            android:layout_marginTop="5dp"
+            app:boxBackgroundColor="@android:color/transparent"
+            android:layout_below="@+id/til_note_title"
+            android:layout_alignRight="@+id/til_note_title"
+            android:layout_alignLeft="@+id/til_note_title"
+            android:layout_alignEnd="@+id/til_note_title"
+            android:layout_alignStart="@+id/til_note_title"
+            app:hintTextColor="@color/pink">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_note_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_baseline_event_note_24"
+                android:drawableRight="@drawable/ic_baseline_event_note_24"
+                android:drawableTint="@color/purple_500"
+                android:backgroundTint="@color/pink"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_note_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Note Description"
+            android:layout_marginTop="5dp"
+            app:boxBackgroundColor="@android:color/transparent"
+            android:layout_below="@+id/til_note_subtitle"
+            android:layout_alignRight="@+id/til_note_subtitle"
+            android:layout_alignLeft="@+id/til_note_subtitle"
+            android:layout_alignEnd="@+id/til_note_subtitle"
+            android:layout_alignStart="@+id/til_note_subtitle"
+            app:hintTextColor="@color/pink"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_note_desc"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:drawableEnd="@drawable/ic_outline_event_note_24"
+                android:drawableRight="@drawable/ic_outline_event_note_24"
+                android:drawableTint="@color/purple_500"
+                android:backgroundTint="@color/pink"
+
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/reminderSwitch"
+            android:text="Set Reminder"
+            android:textSize="30sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end|center_vertical"
+            android:layout_marginVertical="5dp"
+            android:layout_below="@+id/til_note_desc"
+            android:layout_alignLeft="@+id/til_note_desc"
+            android:layout_alignRight="@+id/til_note_desc"
+            android:layout_alignStart="@+id/til_note_desc"
+            android:layout_alignEnd="@+id/til_note_desc"
+            app:thumbTint="@color/pink"
+           />
+
+        <TimePicker
+            android:id="@+id/reminder_time_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/reminderSwitch"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@id/reminderSwitch"
+            android:layout_alignLeft="@id/reminderSwitch"
+            android:layout_alignEnd="@id/reminderSwitch"
+            android:layout_alignStart="@id/reminderSwitch"
+            android:headerBackground="@color/pink"
+            android:numbersSelectorColor="@color/pink"/>
+    </RelativeLayout>
+</ScrollView>
