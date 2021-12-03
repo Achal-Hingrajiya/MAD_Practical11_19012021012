@@ -7,7 +7,6 @@ import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
-import src.LoginInfo
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

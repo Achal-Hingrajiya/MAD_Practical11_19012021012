@@ -17,7 +17,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import src.LoginInfo
 import src.receivers.AlarmBroadcastReceiver
 
 class DashboardActivity : AppCompatActivity() {
