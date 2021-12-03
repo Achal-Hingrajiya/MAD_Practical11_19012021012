@@ -5,11 +5,13 @@ import android.app.*
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.drawable.AnimationDrawable
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ListView
@@ -22,9 +24,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
+import src.DatabaseHandler
 import src.ListBaseAdapter
 import src.Notes
-import src.Notes.Companion.notesArray
 import src.receivers.AlarmBroadcastReceiver
 import src.receivers.NotificationBroadcastReceiver
 import java.util.*
@@ -34,6 +36,11 @@ class NotesActivity : AppCompatActivity() {
 
     val channelId = "notesNotificationChannel"
     val channelName = "Notes Notification Channel"
+    private lateinit var sharedPreferences : SharedPreferences
+
+
+    private val databaseHandler = DatabaseHandler(this)
+
 
     @SuppressLint("NewApi")
     @RequiresApi(Build.VERSION_CODES.M)
@@ -42,6 +49,8 @@ class NotesActivity : AppCompatActivity() {
         createNotificationChannel()
 
         setContentView(R.layout.activity_notes)
+
+        sharedPreferences = getSharedPreferences("UserInfo",Context.MODE_PRIVATE)
 
         val bNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         val fabAddNote = findViewById<FloatingActionButton>(R.id.fab_add_note)
@@ -60,9 +69,10 @@ class NotesActivity : AppCompatActivity() {
             }
         }
 
-        val lvAdapter = ListBaseAdapter(this, Notes.notesArray)
+        val lvAdapter = ListBaseAdapter(this)
 
         lvNotes.adapter =lvAdapter
+
 
         fabAddNote.setOnClickListener {
             showAddNoteDialog(lvAdapter)
@@ -73,6 +83,8 @@ class NotesActivity : AppCompatActivity() {
         ivPhotos.setBackgroundResource(R.drawable.photos_animation_list)
         val photoAnim = ivPhotos.background as AnimationDrawable
         photoAnim.start()
+
+
     }
 
 
@@ -134,24 +146,31 @@ class NotesActivity : AppCompatActivity() {
                     val hour = timePicker.hour
                     val minute = timePicker.minute
                     val remTimeInMillis = getMillis(hour, minute)
-                    val modifiedTime = getCurrentDateTime(remTimeInMillis)
+                    val reminderTime = getCurrentDateTime(remTimeInMillis)
 
                     if(title.isBlank() or subtitle.isBlank() or desc.isBlank()){
                         Toast.makeText(this, "All Fields are required.",Toast.LENGTH_LONG).show()
                     }
                     else{
-                        val note = Notes(
+                        var id : Int = sharedPreferences.getInt("id",0)
+                        val note = Notes(id = id,
                             title= title,
                             subTitle= subtitle,
-                            Description = desc,
+                            description = desc,
                             isReminder = isReminder,
-                            modifiedTime =modifiedTime,
+                            reminderTime = reminderTime,
                         )
 
 
-                        Notes.addNote(note)
-                        lvAdapter.notifyDataSetChanged()
+                        databaseHandler.insertNote(note)
                         setReminder(this, note, remTimeInMillis)
+                        id += 1
+                        val editor = sharedPreferences.edit()
+                        editor.putInt("id", id)
+                        editor.apply()
+
+                        lvAdapter.notifyDataSetChanged()
+
                     }
 
 
@@ -165,9 +184,10 @@ class NotesActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     fun setReminder(context: Context, notes: Notes, timeInMillis :Long)
     {
-        val index = notesArray.indexOf(notes)
+        val index = sharedPreferences.getInt("id",0)
         val intent = Intent(context, NotificationBroadcastReceiver::class.java)
         intent.putExtra("index", index)
+        Log.i("Index_Info","Index from Notes Activity While setting reminder: $index")
         val pendingIntent = PendingIntent.getBroadcast(
                 context,
                 index,

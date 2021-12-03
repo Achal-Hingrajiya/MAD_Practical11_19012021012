@@ -1,46 +1,39 @@
 package src
 
 import android.annotation.SuppressLint
-import android.app.AlarmManager
 import android.app.AlertDialog
-import android.app.PendingIntent
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.Button
-import android.widget.TextView
-import android.widget.TimePicker
+import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
 import com.example.practical11_19012021012.R
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
-import src.receivers.AlarmBroadcastReceiver
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ListBaseAdapter(private val context: Context, private val dataSource: ArrayList<Notes>) : BaseAdapter() {
+class ListBaseAdapter(private val context: Context) : BaseAdapter() {
+
+    private val databaseHandler = DatabaseHandler(context.applicationContext)
+
+    private var dataSource: ArrayList<Notes> = databaseHandler.getAllNotes()
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun getHour(remindertime: Long): Int {
+    fun getHour(): Int {
         val cal = Calendar.getInstance()
-        cal.time = Date(remindertime)
         return cal[Calendar.HOUR_OF_DAY
         ]
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun getMinute(remindertime: Long): Int {
+    fun getMinute(): Int {
         val cal = Calendar.getInstance()
-        cal.time = Date(remindertime)
         return cal[Calendar.MINUTE]
     }
 
@@ -80,11 +73,11 @@ class ListBaseAdapter(private val context: Context, private val dataSource: Arra
 //
         title.setText(note.title)
         subtitle.setText(note.subTitle)
-        desc.setText(note.Description)
+        desc.setText(note.description)
         reminderSwitch.isChecked = note.isReminder
 
-        timePicker.hour = getHour(note.remindertime)
-        timePicker.minute = getMinute(note.remindertime)
+        timePicker.hour = getHour()
+        timePicker.minute = getMinute()
 
         builder.setView(customLayout)
         builder.setPositiveButton(
@@ -98,11 +91,12 @@ class ListBaseAdapter(private val context: Context, private val dataSource: Arra
 
                     note.title = title.text.toString()
                     note.subTitle = subtitle.text.toString()
-                    note.Description = desc.text.toString()
+                    note.description = desc.text.toString()
                     note.isReminder = reminderSwitch.isChecked
                     note.modifiedTime = modifiedTime
 
 
+                    databaseHandler.updateNote(note)
                     notifyDataSetChanged()
 
                 })
@@ -112,12 +106,16 @@ class ListBaseAdapter(private val context: Context, private val dataSource: Arra
 
     }
 
+    override fun notifyDataSetChanged() {
+        dataSource = databaseHandler.getAllNotes()
+        super.notifyDataSetChanged()
+    }
 
     override fun getCount(): Int {
         return dataSource.size
     }
 
-    override fun getItem(position: Int): Any {
+    override fun getItem(position: Int): Notes {
         return dataSource[position]
     }
 
@@ -136,16 +134,27 @@ class ListBaseAdapter(private val context: Context, private val dataSource: Arra
         val tvNoteTitle = rowView.findViewById<TextView>(R.id.tv_note_title)
         val tvNoteSubtitle = rowView.findViewById<TextView>(R.id.tv_note_subtitle)
         val tvNoteDesc = rowView.findViewById<TextView>(R.id.tv_note_desc)
-        val tvNoteModifiedTime = rowView.findViewById<TextView>(R.id.note_modified_time)
+        val tvNoteReminderTime = rowView.findViewById<TextView>(R.id.note_reminder_time)
         val btnEdit = rowView.findViewById<Button>(R.id.btn_edit_note)
         val btnDelete = rowView.findViewById<Button>(R.id.btn_delete_note)
+        val llSection = rowView.findViewById<LinearLayout>(R.id.ll_note_section2) as ViewGroup
+
+
 
         val note = getItem(position) as Notes
 
+
+        if(note.modifiedTime.isNotBlank()){
+
+            inflater.inflate(R.layout.tv_modified_time, llSection)
+            val tvNoteModifiedTime = rowView.findViewById<TextView>(R.id.note_modified_time)
+
+            tvNoteModifiedTime.text = note.modifiedTime
+        }
         tvNoteTitle.text = note.title
         tvNoteSubtitle.text = note.subTitle
-        tvNoteDesc.text = note.Description
-        tvNoteModifiedTime.text = note.modifiedTime
+        tvNoteDesc.text = note.description
+        tvNoteReminderTime.text = note.reminderTime
 
         btnEdit.setOnClickListener {
 
@@ -154,7 +163,9 @@ class ListBaseAdapter(private val context: Context, private val dataSource: Arra
 
 
         btnDelete.setOnClickListener {
-            Notes.notesArray.removeAt(position)
+
+            databaseHandler.deleteNote(getItem(position))
+            dataSource.removeAt(position)
             notifyDataSetChanged()
         }
         return rowView

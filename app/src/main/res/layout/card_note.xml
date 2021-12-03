@@ -54,55 +54,66 @@
             android:layout_alignStart="@+id/tv_note_subtitle" />
         
         <LinearLayout
+            android:id="@+id/ll_note_section2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="1"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginVertical="20dp"
             android:layout_below="@+id/tv_note_desc"
             android:layout_alignLeft="@+id/tv_note_desc"
             android:layout_alignStart="@+id/tv_note_desc">
-            <TextView
-                android:id="@+id/note_modified_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sep, 25 2020 09:45:23 am"
-                android:textColor="@color/white"
-                />
-
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:weightSum="1"
-                android:gravity="end">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <Button
-                    android:id="@+id/btn_edit_note"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:gravity="center"
-                    android:background="@drawable/ic_baseline_edit_24"
-                    android:backgroundTint="@color/yellow"/>
+                <TextView
+                    android:id="@+id/note_reminder_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sep, 25 2020 09:45:23 am"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.2"/>
 
-                <Button
-                    android:id="@+id/btn_delete_note"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:gravity="center"
-                    android:background="@drawable/ic_baseline_delete_24"
-                    android:backgroundTint="@color/red"/>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.2"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1"
+                    android:gravity="end">
+
+                    <Button
+                        android:id="@+id/btn_edit_note"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:gravity="center"
+                        android:background="@drawable/ic_baseline_edit_24"
+                        android:backgroundTint="@color/yellow"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.2"/>
+
+                    <Button
+                        android:id="@+id/btn_delete_note"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:gravity="center"
+                        android:background="@drawable/ic_baseline_delete_24"
+                        android:backgroundTint="@color/red"/>
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.2"/>
+
+                </LinearLayout>
 
             </LinearLayout>
+
+
         </LinearLayout>
 
     </RelativeLayout>
