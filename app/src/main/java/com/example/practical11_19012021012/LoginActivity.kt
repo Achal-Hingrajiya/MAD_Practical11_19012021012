@@ -1,26 +1,38 @@
 package com.example.practical11_19012021012
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
+import src.Authentication
+import src.User
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        if (LoginInfo.logged_in){
-            Toast.makeText(this, "Welcome back, ${LoginInfo.full_name}!", Toast.LENGTH_SHORT).show()
+        val sharedPreferences = getSharedPreferences("UserInfo", Context.MODE_PRIVATE)
+
+        val loggedIn = sharedPreferences.getBoolean("logged",false)
+        val registered = sharedPreferences.getBoolean("registered",false)
+
+
+        if (loggedIn){
+            val user = Authentication.getUserInfo(sharedPreferences)
+            Toast.makeText(this, "Welcome back, ${user.full_name}!", Toast.LENGTH_SHORT).show()
             Intent(this, SplashActivity :: class.java).apply {
+                putExtra("user", user)
                 startActivity(this)
             }
         }
 
-        var signUpBtn = findViewById<Button>(R.id.tbtn_signup)
+        val signUpBtn = findViewById<Button>(R.id.tbtn_signup)
 
         signUpBtn.setOnClickListener {
             Intent(this, SignUpActivity :: class.java).apply {
@@ -28,17 +40,17 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        var loginButton = findViewById<Button>(R.id.login)
+        val loginButton = findViewById<Button>(R.id.login)
 
         loginButton.setOnClickListener {
             val email : String = findViewById<TextInputEditText>(R.id.lg_email).text.toString()
             val password : String = findViewById<TextInputEditText>(R.id.lg_password).text.toString()
             Log.i("LoginActivity","Email: $email Password: $password")
 
-            if (LoginInfo.registered()){
+            if (registered){
 
                 if (email.isNotBlank() && password.isNotBlank()){
-                    if (LoginInfo.login(email, password)){
+                    if (Authentication.login(sharedPreferences, email, password)){
                         Toast.makeText(this, "Logged In Successfully!", Toast.LENGTH_SHORT).show()
 
                         Intent(this, SplashActivity :: class.java).apply {
