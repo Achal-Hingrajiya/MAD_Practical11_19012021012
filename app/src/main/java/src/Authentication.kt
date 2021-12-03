@@ -36,12 +36,20 @@ class Authentication {
             if (username == email && pwd == password){
 
                 val editor = sharedPreferences.edit()
-                editor.putBoolean("loggedIn", true)
+                editor.putBoolean("logged", true)
                 editor.apply()
 
                 return true
             }
             return false
+        }
+
+        fun logout(sharedPreferences: SharedPreferences){
+
+            val editor = sharedPreferences.edit()
+            editor.remove("logged")
+            editor.apply()
+
         }
 
     }

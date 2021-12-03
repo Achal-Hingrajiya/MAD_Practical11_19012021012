@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.icu.text.SimpleDateFormat
@@ -17,6 +18,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import src.Authentication
+import src.User
 import src.receivers.AlarmBroadcastReceiver
 
 class DashboardActivity : AppCompatActivity() {
@@ -29,13 +32,18 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        var logoutBtn = findViewById<Button>(R.id.tbtn_logout)
+
+        val sharedPreferences = getSharedPreferences("UserInfo", Context.MODE_PRIVATE)
+
+        val user = Authentication.getUserInfo(sharedPreferences)
+
+        val logoutBtn = findViewById<Button>(R.id.tbtn_logout)
         btnSetAlarm = findViewById(R.id.tbtn_set_alarm)
 
-        val name = LoginInfo.full_name
-        val email = LoginInfo.email
-        val phone = LoginInfo.phone_number
-        val city = LoginInfo.city
+        val name = user.full_name
+        val email = user.email
+        val phone = user.phone_number
+        val city = user.city
 
         val tvName = findViewById<TextView>(R.id.dash_name)
         val tvEmail = findViewById<TextView>(R.id.dash_email)
@@ -70,7 +78,7 @@ class DashboardActivity : AppCompatActivity() {
 
     logoutBtn.setOnClickListener {
             Toast.makeText(this, "Logged Out!", Toast.LENGTH_SHORT).show()
-            LoginInfo.logout()
+            Authentication.logout(sharedPreferences)
             Intent(this, LoginActivity::class.java).apply {
                 startActivity(this)
             }

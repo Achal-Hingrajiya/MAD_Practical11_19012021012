@@ -24,10 +24,8 @@ class LoginActivity : AppCompatActivity() {
 
 
         if (loggedIn){
-            val user = Authentication.getUserInfo(sharedPreferences)
-            Toast.makeText(this, "Welcome back, ${user.full_name}!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Welcome back, ${sharedPreferences.getString("full_name", "")}!", Toast.LENGTH_SHORT).show()
             Intent(this, SplashActivity :: class.java).apply {
-                putExtra("user", user)
                 startActivity(this)
             }
         }
