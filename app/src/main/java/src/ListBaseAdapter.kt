@@ -149,8 +149,10 @@ class ListBaseAdapter(private val context: Context) : BaseAdapter() {
             inflater.inflate(R.layout.tv_modified_time, llSection)
             val tvNoteModifiedTime = rowView.findViewById<TextView>(R.id.note_modified_time)
 
-            tvNoteModifiedTime.text = note.modifiedTime
+            val str = "Reminder at, ${note.modifiedTime}"
+            tvNoteModifiedTime.text = str
         }
+
         tvNoteTitle.text = note.title
         tvNoteSubtitle.text = note.subTitle
         tvNoteDesc.text = note.description

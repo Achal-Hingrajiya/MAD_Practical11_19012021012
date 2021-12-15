@@ -41,7 +41,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 
         val builder = NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("title: ${note.title} i: $index")
+                .setContentTitle(note.title)
                 .setContentText(note.description)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
