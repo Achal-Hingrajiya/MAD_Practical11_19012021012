@@ -161,6 +161,8 @@
                         android:id="@+id/lg_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:password="true"
                         android:drawableEnd="@drawable/ic_baseline_vpn_key_24"
                         android:drawableRight="@drawable/ic_baseline_vpn_key_24"
                         android:drawableTint="@color/purple_500"/>
